@@ -1,4 +1,4 @@
-import 'package:chat_x/controllers/signup_controller.dart';
+import 'package:chat_x/controllers/auth_controller.dart';
 import 'package:chat_x/view/components/button_x.dart';
 import 'package:chat_x/view/pages/home_page.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +13,8 @@ class SignupPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmController = TextEditingController();
+  final AuthController _authController = Get.find<AuthController>();
+
   final void Function()? onLogintap;
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class SignupPage extends StatelessWidget {
           const SizedBox(
             height: 50,
           ),
-          Text(
+          const Text(
             "Let's create an account for you.",
             style: TextStyle(
               fontWeight: FontWeight.w500,
@@ -69,12 +71,12 @@ class SignupPage extends StatelessWidget {
           ButtonX(
               buttonName: "Sign Up",
               onButtonTap: () {
-                var controller = Get.find<SignupController>();
+                // var controller = Get.find<SignupController>();
                 if (_passwordController.text == _confirmController.text) {
-                  
-                  controller.signup(
-                      _emailController.text, _passwordController.text);
-                  Get.offAllNamed("/home");
+                  _authController.signUp(_emailController.text, _passwordController.text);
+                  // controller.signup(
+                  //     _emailController.text, _passwordController.text);
+                  // Get.offAllNamed("/home");
                 }
 
               }),
@@ -84,7 +86,7 @@ class SignupPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 "Already have an account?",
                 style: TextStyle(color: Colors.white),
               ),

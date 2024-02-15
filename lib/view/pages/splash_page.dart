@@ -24,7 +24,7 @@ class SplashPage extends StatelessWidget {
                 width: 130,
                 )),
             ),
-          SizedBox(
+          const SizedBox(
             child: Text("Chat X",
             style: TextStyle(
               color: Colors.white,

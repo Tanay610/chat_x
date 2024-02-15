@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:chat_x/bindings/splash_binding.dart';
+import 'package:chat_x/controllers/auth_controller.dart';
 import 'package:chat_x/firebase_options.dart';
 import 'package:chat_x/routes/x_pages.dart';
 import 'package:chat_x/view/pages/splash_page.dart';
@@ -10,11 +13,13 @@ import 'package:get/get.dart';
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+   AuthController authController = Get.put(AuthController());
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key,});
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +31,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: SplashPage(),
+      home: const SplashPage(),
     );
   }
 }

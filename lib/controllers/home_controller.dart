@@ -1,13 +1,11 @@
-import 'package:chat_x/services/auth_services/auth_gate.dart';
-import 'package:chat_x/services/auth_services/auth_methods.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxService{
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final AuthServices authServices = AuthServices();
-    // Rx<User?> currentUser = Rx<User?>(EmailAuthCredential);
+  // final AuthServices authServices = AuthServices();
 
 
    Rxn<User> firebaseUser = Rxn<User>();
@@ -35,12 +33,5 @@ class HomeController extends GetxService{
   }
 
   
-
-  // Method to get the current user
-  // User? getCurrentUser() {
-  //   print(currentUser.value);
-  //   return currentUser.value;
-  // }
-
 
 }

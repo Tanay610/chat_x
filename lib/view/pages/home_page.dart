@@ -1,6 +1,5 @@
+import 'package:chat_x/controllers/auth_controller.dart';
 import 'package:chat_x/controllers/home_controller.dart';
-import 'package:chat_x/controllers/signup_controller.dart';
-import 'package:chat_x/services/auth_services/auth_methods.dart';
 import 'package:chat_x/services/chat_services/chat_service.dart';
 import 'package:chat_x/view/components/page_build_x.dart';
 import 'package:chat_x/view/components/userTile_x.dart';
@@ -18,7 +17,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ChatServices _chatServices = ChatServices();
-  final _authServices = FirebaseAuth.instance;
+  // final _authServices = FirebaseAuth.instance;
+   final AuthController _authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +34,35 @@ class _HomePageState extends State<HomePage> {
         ),
         drawer: Drawer(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              DrawerHeader(child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.blue,
+                    child: Icon(Icons.person_3_sharp,
+                    size: 30,
+                    
+                    ),
+                  ),
+                  GetX<AuthController>(
+                    builder: (controller) {
+                      return Text(controller.user.value?.email??"No user is logged in.",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600
+                      ),
+                      );
+                    }
+                  ),
+                ],
+              ),),
               InkWell(
                 onTap: () {
                   showDialog(
                       context: context,
                       builder: (context) {
-                    var controller = Get.put(HomeController());
                         return AlertDialog(
                           title: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -59,8 +80,7 @@ class _HomePageState extends State<HomePage> {
                                 child: const Text("NO")),
                             TextButton(
                                 onPressed: () {
-                                  controller.signOut();
-                                  Get.offAllNamed("/login");
+                                  _authController.signOut();
                                 },
                                 child: const Text("YES"))
                           ],
@@ -71,15 +91,16 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.all(10.0),
                   child: SizedBox(
                       child: ListTile(
+                      
                     title: Text(
                       'Log out',
                       style:
-                          TextStyle(fontSize: 27, fontWeight: FontWeight.w500),
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
                     ),
                     trailing: Icon(
                       Icons.logout,
                       color: Colors.purple.shade400,
-                      size: 30,
+                      size: 26,
                     ),
                   )),
                 ),
@@ -119,9 +140,9 @@ class _HomePageState extends State<HomePage> {
   Widget _buildUserListItem(Map<String, dynamic> userData, BuildContext context) {
     //* display all users except current user
    return Obx(() {
-    final user = Get.put(HomeController()).firebaseUser.value;
+    final User? currentUser = _authController.user.value;
     // print(user);
-      if (userData["email"] != user) {
+      if (currentUser != null && userData["email"] != currentUser.email) {
       return UserTile(
         onTiletap: () {
           Navigator.of(context).push(pageRouteBuilder(ChatPage(

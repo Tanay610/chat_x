@@ -53,8 +53,8 @@ class DefaultFirebaseOptions {
   }
 
   static FirebaseOptions android = FirebaseOptions(
-    apiKey: env['FIREBASE_API_KEY']!,
-    appId: env['FIREBASE_APP_ID']!,
+    apiKey: "AIzaSyBow8pdhyn1hKsB16IMy8h7CcFduYGuIcE",
+    appId: "1:1082860497259:android:8b1e384b0b9e4cc3c5c42e",
     messagingSenderId: '1082860497259',
     projectId: 'chatx-1d74f',
     storageBucket: 'chatx-1d74f.appspot.com',

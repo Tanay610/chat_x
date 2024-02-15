@@ -1,4 +1,4 @@
-import 'package:chat_x/controllers/login_controller.dart';
+import 'package:chat_x/controllers/auth_controller.dart';
 import 'package:chat_x/view/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,6 +13,7 @@ class LoginPage extends StatelessWidget {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final AuthController _authController = Get.find<AuthController>();
 
 
   
@@ -62,20 +63,7 @@ class LoginPage extends StatelessWidget {
           ButtonX(
             buttonName: "Login",
             onButtonTap: () {
-              var controller = Get.put(LoginController());
-              try {
-                controller.login(
-                    _emailController.text, _passwordController.text);
-              } catch (e) {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text(e.toString()),
-                      );
-                    });
-              }
-              Get.offAllNamed("/home");
+              _authController.login(_emailController.text, _passwordController.text);
             },
           ),
           const SizedBox(

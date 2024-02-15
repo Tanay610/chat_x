@@ -1,11 +1,13 @@
 
+import 'package:chat_x/controllers/auth_controller.dart';
+import 'package:chat_x/controllers/home_controller.dart';
 import 'package:chat_x/services/chat_services/chat_service.dart';
 import 'package:chat_x/view/components/bubble_x.dart';
 import 'package:chat_x/view/components/textFiled_x.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import '../../services/auth_services/auth_methods.dart';
 
 class ChatPage extends StatefulWidget {
   final String receiverEmail;
@@ -22,11 +24,13 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController _inputChatContoller = TextEditingController();
+  
+  final AuthController authController = Get.find<AuthController>();
 
   //* chat and auth services
   final ChatServices _chatServices = ChatServices();
 
-  final AuthServices _authServices = AuthServices();
+  // final AuthServices _authServices = AuthServices();
 
   //* for textfield focus
   FocusNode _focusNode = FocusNode();
@@ -75,33 +79,34 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.purple.shade200,
-        title: Text(widget.receiverEmail,
-        style: TextStyle(
-          color: Colors.white
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.purple.shade300,
+          title: Text(widget.receiverEmail,
+          style: TextStyle(
+            color: Colors.white
+          ),
+          ),
+          foregroundColor: Colors.white,
+          centerTitle: true,
+         
+          
         ),
-        
-        ),
-        foregroundColor: Colors.white,
-        centerTitle: true,
-       
-        
+        body: Column(
+          children: [
+            Expanded(child: _buildMessagesList()),
+      
+            //user input
+            _buildUserInput(context),
+          ],
+        )
       ),
-      body: Column(
-        children: [
-          Expanded(child: _buildMessagesList()),
-
-          //user input
-          _buildUserInput(context),
-        ],
-      )
     );
   }
 
   Widget _buildMessagesList(){
-    String senderId = _authServices.getCurrentUser()!.uid;
+    String senderId = authController.user.value!.uid;
     return StreamBuilder(stream: _chatServices.getMessages(widget.receiverId, senderId), builder: (context, snapshot){
       //* errors
       if (snapshot.hasError) {
@@ -126,7 +131,7 @@ class _ChatPageState extends State<ChatPage> {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     
         //? is current \user
-        bool isCurrentUser = data['senderId'] == _authServices.getCurrentUser()!.uid;
+        bool isCurrentUser = data['senderId'] == authController.user.value!.uid;
 
         //? align message to the right is sender is the current user, otherwsise left
         var alignment = isCurrentUser ? Alignment.centerRight:Alignment.centerLeft;
