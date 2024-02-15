@@ -120,8 +120,8 @@ class _HomePageState extends State<HomePage> {
     //* display all users except current user
    return Obx(() {
     final user = Get.put(HomeController()).firebaseUser.value;
-    print(user);
-      if (userData["email"] != user!.email) {
+    // print(user);
+      if (userData["email"] != user) {
       return UserTile(
         onTiletap: () {
           Navigator.of(context).push(pageRouteBuilder(ChatPage(
